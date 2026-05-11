@@ -46,7 +46,7 @@ export default function HomeScreen({navigation}) {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [dispatch]);
 
   const checkedIn = todayRecord?.checkIn;
   const checkedOut = todayRecord?.checkOut;

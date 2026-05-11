@@ -29,6 +29,11 @@ axiosInstance.interceptors.response.use(
   async error => {
     if (error.response?.status === 401) {
       await AsyncStorage.removeItem('authToken');
+      // Lazy require to avoid circular dependency; clears Redux auth state
+      // so the navigator re-renders to the Login screen.
+      const store = require('../store').default;
+      const {logout} = require('../store/authSlice');
+      store.dispatch(logout());
     }
     return Promise.reject(error);
   },
