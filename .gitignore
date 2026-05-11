@@ -141,3 +141,19 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# React Native
+*.jsbundle
+ios/
+android/
+__tests__/
+*.keystore
+!debug.keystore
+.buckd/
+buck-out/
+\#*
+.#*
+*.hprof
+.cxx/
+*.ipa
+*.apk
