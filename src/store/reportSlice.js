@@ -3,16 +3,28 @@ import axiosInstance from '../api/axiosInstance';
 
 export const submitReport = createAsyncThunk(
   'report/submit',
-  async ({title, description, photoUri}, {rejectWithValue}) => {
+  async ({title, description, photoAsset}, {rejectWithValue}) => {
     try {
       const formData = new FormData();
       formData.append('title', title);
       formData.append('description', description);
-      if (photoUri) {
-        const filename = photoUri.split('/').pop();
-        const match = /\.(\w+)$/.exec(filename);
-        const type = match ? `image/${match[1]}` : 'image/jpeg';
-        formData.append('photo', {uri: photoUri, name: filename, type});
+      if (photoAsset) {
+        const extToMime = {
+          jpg: 'image/jpeg',
+          jpeg: 'image/jpeg',
+          png: 'image/png',
+          gif: 'image/gif',
+          webp: 'image/webp',
+          heic: 'image/heif',
+          heif: 'image/heif',
+          bmp: 'image/bmp',
+          tiff: 'image/tiff',
+          tif: 'image/tiff',
+        };
+        const filename = photoAsset.fileName || 'photo.jpg';
+        const ext = filename.split('.').pop().toLowerCase();
+        const type = photoAsset.type || extToMime[ext] || 'image/jpeg';
+        formData.append('photo', {uri: photoAsset.uri, name: filename, type});
       }
       const response = await axiosInstance.post('/reports', formData, {
         headers: {'Content-Type': 'multipart/form-data'},

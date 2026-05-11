@@ -95,6 +95,16 @@ const attendanceSlice = createSlice({
       .addCase(fetchAttendanceHistory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.history = action.payload;
+        // Populate todayRecord from history so HomeScreen shows today's status
+        // even before a check-in/check-out action is dispatched.
+        const todayStr = new Date().toISOString().slice(0, 10);
+        const todayEntry = action.payload.find(record => {
+          const recordDate = (record.checkIn || record.date || '').slice(0, 10);
+          return recordDate === todayStr;
+        });
+        if (todayEntry !== undefined) {
+          state.todayRecord = todayEntry;
+        }
       })
       .addCase(fetchAttendanceHistory.rejected, (state, action) => {
         state.isLoading = false;

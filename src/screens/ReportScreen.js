@@ -23,7 +23,7 @@ export default function ReportScreen() {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [photoUri, setPhotoUri] = useState(null);
+  const [photoAsset, setPhotoAsset] = useState(null);
 
   useEffect(() => {
     if (submitSuccess) {
@@ -32,7 +32,7 @@ export default function ReportScreen() {
       ]);
       setTitle('');
       setDescription('');
-      setPhotoUri(null);
+      setPhotoAsset(null);
     }
   }, [submitSuccess, dispatch]);
 
@@ -60,7 +60,7 @@ export default function ReportScreen() {
         }
         const asset = response.assets?.[0];
         if (asset?.uri) {
-          setPhotoUri(asset.uri);
+          setPhotoAsset(asset);
         }
       },
     );
@@ -75,7 +75,7 @@ export default function ReportScreen() {
       Alert.alert('Validation', 'Please enter a report description.');
       return;
     }
-    dispatch(submitReport({title: title.trim(), description: description.trim(), photoUri}));
+    dispatch(submitReport({title: title.trim(), description: description.trim(), photoAsset}));
   };
 
   return (
@@ -123,16 +123,16 @@ export default function ReportScreen() {
           style={styles.photoButton}
           onPress={handleSelectPhoto}>
           <Text style={styles.photoButtonText}>
-            {photoUri ? '📷 Change Photo' : '📷 Attach Photo'}
+            {photoAsset ? '📷 Change Photo' : '📷 Attach Photo'}
           </Text>
         </TouchableOpacity>
 
-        {photoUri && (
+        {photoAsset && (
           <View style={styles.photoPreview}>
-            <Image source={{uri: photoUri}} style={styles.previewImage} />
+            <Image source={{uri: photoAsset.uri}} style={styles.previewImage} />
             <TouchableOpacity
               style={styles.removePhoto}
-              onPress={() => setPhotoUri(null)}>
+              onPress={() => setPhotoAsset(null)}>
               <Text style={styles.removePhotoText}>✕ Remove</Text>
             </TouchableOpacity>
           </View>

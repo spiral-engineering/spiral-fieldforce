@@ -39,14 +39,14 @@ export default function HomeScreen({navigation}) {
 
   const isRefreshing = attendanceLoading || reportLoading;
 
-  const loadData = () => {
+  const loadData = React.useCallback(() => {
     dispatch(fetchAttendanceHistory());
     dispatch(fetchReports());
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     loadData();
-  }, [dispatch]);
+  }, [loadData]);
 
   const checkedIn = todayRecord?.checkIn;
   const checkedOut = todayRecord?.checkOut;
